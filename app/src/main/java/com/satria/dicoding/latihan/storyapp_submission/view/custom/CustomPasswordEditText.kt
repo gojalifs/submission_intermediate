@@ -1,0 +1,24 @@
+package com.satria.dicoding.latihan.storyapp_submission.view.custom
+
+import android.content.Context
+import android.util.AttributeSet
+
+class CustomPasswordEditText : AppCompatValidationEditText {
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
+
+    override fun onValidationTextChanged() {
+        if (text.toString().length >= 8) {
+            setValidationError(null)
+        } else {
+            setValidationError("Password must be more than 8 characters")
+        }
+    }
+}
