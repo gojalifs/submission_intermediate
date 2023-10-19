@@ -2,7 +2,6 @@ package com.satria.dicoding.latihan.storyapp_submission.view.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.satria.dicoding.latihan.storyapp_submission.R
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
