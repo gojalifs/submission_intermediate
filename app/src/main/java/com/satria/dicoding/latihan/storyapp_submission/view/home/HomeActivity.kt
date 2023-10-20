@@ -1,7 +1,10 @@
 package com.satria.dicoding.latihan.storyapp_submission.view.home
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -10,11 +13,30 @@ import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.factory.HomeViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityHomeBinding
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.ListStoryItem
+import com.satria.dicoding.latihan.storyapp_submission.view.new_story.NewStoryDetailActivity
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private val viewModel by viewModels<HomeViewModel> {
         HomeViewModelFactory.getInstance(applicationContext)
+    }
+
+    private var stories: MutableList<ListStoryItem?> = mutableListOf()
+    private val resultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == NewStoryDetailActivity.RESULT_CODE && it.data != null) {
+            val newStory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.data!!.getParcelableExtra(
+                    NewStoryDetailActivity.EXTRA_DATA,
+                    ListStoryItem::class.java
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                it.data!!.getParcelableExtra(NewStoryDetailActivity.EXTRA_DATA)
+            }
+            stories.add(newStory)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,22 +49,31 @@ class HomeActivity : AppCompatActivity() {
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvStory.addItemDecoration(itemDecoration)
 
-        binding.fabAddStory.setOnClickListener{
-//            val intent = Intent(this, )
+        binding.fabAddStory.setOnClickListener {
+            val intent = Intent(this, NewStoryDetailActivity::class.java)
+            resultLauncher.launch(intent)
         }
 
+        binding.swipeRefresh.setOnRefreshListener {
+            getStories()
+            binding.swipeRefresh.isRefreshing = false
+        }
+
+        getStories()
+    }
+
+    private fun getStories() {
         viewModel.getStories().observe(this) { state ->
             if (state != null) {
                 when (state) {
                     is ResultState.Loading -> {
                         showLoading(true)
-                        /// Todo: add shimmer
                     }
 
                     is ResultState.Success -> {
                         showLoading(false)
-                        val stories = state.data.listStory
-                        setStories(stories ?: emptyList<ListStoryItem>())
+                        stories = state.data.listStory ?: mutableListOf()
+                        setStories(stories)
                     }
 
                     is ResultState.Error -> {
@@ -61,8 +92,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        with(binding){
-            if (isLoading){
+        with(binding) {
+            if (isLoading) {
                 rvStory.visibility = View.INVISIBLE
                 rvStoryShimmer.visibility = View.VISIBLE
             } else {
