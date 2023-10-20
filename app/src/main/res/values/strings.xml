@@ -10,4 +10,6 @@
     <string name="full_name">Full Name</string>
     <string name="back_button">Back Button</string>
     <string name="welcome_logo">Welcome Logo</string>
+    <string name="add_new_story">Add New Story</string>
+    <string name="story">Story</string>
 </resources>

@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         sessionViewModel.getToken().observe(this) {
-            if (it == null) {
+            if (it != null) {
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
