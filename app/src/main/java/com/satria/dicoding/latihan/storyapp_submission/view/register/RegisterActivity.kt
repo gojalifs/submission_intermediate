@@ -1,14 +1,15 @@
 package com.satria.dicoding.latihan.storyapp_submission.view.register
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import com.satria.dicoding.latihan.storyapp_submission.R
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.factory.ViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityRegisterBinding
-import com.satria.dicoding.latihan.storyapp_submission.view.home.HomeActivity
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -24,9 +25,36 @@ class RegisterActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
 
         binding.btnRegister.setOnClickListener {
+            if ((binding.edtName.text.isNullOrEmpty() || binding.edtEmail.text.isNullOrEmpty() || binding.edtPassword.text.isNullOrEmpty()) || (binding.edtName.error != null || binding.edtEmail.error != null || binding.edtPassword.error != null)) {
+                showToast("Please fill the form correctly")
+                binding.btnRegister.isEnabled = false
+                return@setOnClickListener
+            }
             register()
         }
 
+        binding.edtName.addTextChangedListener {
+            binding.btnRegister.isEnabled = isInputValid()
+
+        }
+        binding.edtEmail.addTextChangedListener {
+            binding.btnRegister.isEnabled = isInputValid()
+        }
+        binding.edtPassword.addTextChangedListener {
+            binding.btnRegister.isEnabled = isInputValid()
+        }
+    }
+
+    private fun isInputValid(): Boolean {
+        val nameText = binding.edtName.text.toString()
+        val nameError = binding.edtName.error
+        val mailText = binding.edtEmail.text.toString()
+        val mailError = binding.edtEmail.error
+        val passText = binding.edtPassword.text.toString()
+        val passError = binding.edtPassword.error
+
+        return (nameText.isNotEmpty() && nameError.isNullOrEmpty() && mailText.isNotEmpty() &&
+                mailError.isNullOrEmpty() && passText.isNotEmpty() && passError.isNullOrEmpty())
     }
 
     private fun register() {
@@ -37,17 +65,21 @@ class RegisterActivity : AppCompatActivity() {
         viewModel.register(name, email, password).observe(this) { state ->
             if (state != null) {
                 when (state) {
-                    is ResultState.Loading -> showLoading(true)
+                    is ResultState.Loading -> {
+                        showLoading(true)
+                        binding.btnRegister.isEnabled = false
+                    }
+
                     is ResultState.Success -> {
                         showLoading(false)
-                        val intent = Intent(this, HomeActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        }
-                        startActivity(intent)
+                        binding.btnRegister.isEnabled = true
+                        showToast("Success registering. Please Login")
+                        finish()
                     }
 
                     is ResultState.Error -> {
                         showLoading(false)
+                        binding.btnRegister.isEnabled = true
                         showToast(state.error)
                     }
                 }
@@ -60,6 +92,14 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-
+        if (isLoading) {
+            binding.btnRegister.isEnabled = false
+            binding.btnRegister.text = null
+            binding.progressCircular.visibility = View.VISIBLE
+        } else {
+            binding.progressCircular.visibility = View.INVISIBLE
+            binding.btnRegister.text = getString(R.string.register)
+            binding.btnRegister.isEnabled = true
+        }
     }
 }
