@@ -9,8 +9,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_story"
         android:layout_width="match_parent"
-        android:paddingHorizontal="16dp"
         android:layout_height="match_parent"
+        android:paddingHorizontal="16dp"
+        android:visibility="invisible"
         tools:listitem="@layout/story_card" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -22,5 +23,25 @@
         app:layout_anchor="@id/rv_story"
         app:layout_anchorGravity="bottom|end"
         app:srcCompat="@drawable/round_add_24" />
+
+    <ScrollView
+        android:id="@+id/rv_story_shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/story_card_shimmer" />
+
+            <include layout="@layout/story_card_shimmer" />
+
+            <include layout="@layout/story_card_shimmer" />
+
+            <include layout="@layout/story_card_shimmer" />
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

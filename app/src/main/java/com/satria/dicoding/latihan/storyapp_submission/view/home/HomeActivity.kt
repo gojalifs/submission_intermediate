@@ -1,6 +1,7 @@
 package com.satria.dicoding.latihan.storyapp_submission.view.home
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -55,7 +56,15 @@ class HomeActivity : AppCompatActivity() {
         binding.rvStory.adapter = adapter
     }
 
-    private fun showLoading(isLoading: Boolean? = true) {
-
+    private fun showLoading(isLoading: Boolean) {
+        with(binding){
+            if (isLoading){
+                rvStory.visibility = View.INVISIBLE
+                rvStoryShimmer.visibility = View.VISIBLE
+            } else {
+                rvStory.visibility = View.VISIBLE
+                rvStoryShimmer.visibility = View.INVISIBLE
+            }
+        }
     }
 }
