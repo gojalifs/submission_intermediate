@@ -35,6 +35,7 @@ class RegisterRepository private constructor(private val apiService: ApiService)
         } catch (e: Exception) {
             emit(ResultState.Error("Unknown Error"))
         }
+
     }
 
     companion object {

@@ -8,13 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.satria.dicoding.latihan.storyapp_submission.R
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
-import com.satria.dicoding.latihan.storyapp_submission.data.factory.ViewModelFactory
+import com.satria.dicoding.latihan.storyapp_submission.data.factory.RegisterViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityRegisterBinding
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
     private val viewModel by viewModels<RegisterViewModel> {
-        ViewModelFactory.getInstance()
+        RegisterViewModelFactory.getInstance()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
