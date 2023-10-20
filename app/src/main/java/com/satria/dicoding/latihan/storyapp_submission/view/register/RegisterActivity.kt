@@ -25,7 +25,7 @@ class RegisterActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
 
         binding.btnRegister.setOnClickListener {
-            if ((binding.edtName.text.isNullOrEmpty() || binding.edtEmail.text.isNullOrEmpty() || binding.edtPassword.text.isNullOrEmpty()) || (binding.edtName.error != null || binding.edtEmail.error != null || binding.edtPassword.error != null)) {
+            if (!isInputValid()) {
                 showToast("Please fill the form correctly")
                 binding.btnRegister.isEnabled = false
                 return@setOnClickListener
