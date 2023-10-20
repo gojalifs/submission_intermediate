@@ -1,7 +1,6 @@
 package com.satria.dicoding.latihan.storyapp_submission.view.init
 
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -30,7 +29,6 @@ class MainActivity : AppCompatActivity() {
             if (it != null) {
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.addFlags(FLAG_ACTIVITY_NO_HISTORY)
                 startActivity(intent)
             } else {
                 val intent = Intent(this, LoginActivity::class.java).apply {

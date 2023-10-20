@@ -27,6 +27,10 @@ class HomeActivity : AppCompatActivity() {
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvStory.addItemDecoration(itemDecoration)
 
+        binding.fabAddStory.setOnClickListener{
+//            val intent = Intent(this, )
+        }
+
         viewModel.getStories().observe(this) { state ->
             if (state != null) {
                 when (state) {
