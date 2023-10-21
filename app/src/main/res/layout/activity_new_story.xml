@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        tools:context=".view.new_story.NewStoryDetailActivity">
+        tools:context=".view.new_story.NewStoryActivity">
 
 
         <ImageView
@@ -60,6 +60,7 @@
             android:layout_marginVertical="8dp"
             android:hint="@string/type_description_here"
             android:importantForAutofill="no"
+            android:inputType="text"
             android:maxLines="3"
             android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"

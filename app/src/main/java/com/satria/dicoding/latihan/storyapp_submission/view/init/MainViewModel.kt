@@ -17,4 +17,10 @@ class MainViewModel(private val pref: SessionPreferences) : ViewModel() {
     fun getToken(): LiveData<String?> {
         return pref.getToken().asLiveData()
     }
+
+    fun deleteToken() {
+        viewModelScope.launch {
+            pref.deleteToken()
+        }
+    }
 }

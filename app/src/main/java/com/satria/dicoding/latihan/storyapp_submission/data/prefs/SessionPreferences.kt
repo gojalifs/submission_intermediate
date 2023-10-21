@@ -26,10 +26,11 @@ class SessionPreferences private constructor(private val dataStore: DataStore<Pr
         }
     }
 
-    suspend fun deleteToken() {
+    suspend fun deleteToken(): Boolean {
         dataStore.edit {
             it.remove(sessionToken)
         }
+        return true
     }
 
     companion object {

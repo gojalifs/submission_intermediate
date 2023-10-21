@@ -1,8 +1,11 @@
 package com.satria.dicoding.latihan.storyapp_submission.view.home
 
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,13 +25,20 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_
         holder.bind(storyItem)
 
         holder.itemView.setOnClickListener {
+
+            val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                holder.itemView.context as Activity,
+                Pair(holder.binding.imStoryImage, "im_story_image"),
+                Pair(holder.binding.tvUserName, "tv_user_name")
+
+            )
             val intent = Intent(holder.itemView.context, StoryDetailActivity::class.java)
             intent.putExtra(StoryDetailActivity.EXTRA_DATA, storyItem)
-            holder.itemView.context.startActivity(intent)
+            holder.itemView.context.startActivity(intent, optionsCompat.toBundle())
         }
     }
 
-    class MyViewHolder(private val binding: StoryCardBinding) :
+    class MyViewHolder(val binding: StoryCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(storyItem: ListStoryItem) {
             Glide.with(binding.root.context).load(storyItem.photoUrl).into(binding.imStoryImage)

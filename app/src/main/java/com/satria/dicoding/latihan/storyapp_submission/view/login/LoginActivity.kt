@@ -84,7 +84,6 @@ class LoginActivity : AppCompatActivity() {
                         showToast("Login Success")
                         val intent = Intent(this, HomeActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                         startActivity(intent)
                     }
 

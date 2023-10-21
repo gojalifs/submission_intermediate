@@ -15,12 +15,12 @@ import androidx.core.content.ContextCompat
 import com.satria.dicoding.latihan.storyapp_submission.R
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.factory.NewStoryViewModelFactory
-import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityNewStoryDetailBinding
+import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityNewStoryBinding
 import com.satria.dicoding.latihan.storyapp_submission.utils.Utils
 import com.satria.dicoding.latihan.storyapp_submission.utils.Utils.reduceFileSize
 
-class NewStoryDetailActivity : AppCompatActivity(), View.OnClickListener {
-    private lateinit var binding: ActivityNewStoryDetailBinding
+class NewStoryActivity : AppCompatActivity(), View.OnClickListener {
+    private lateinit var binding: ActivityNewStoryBinding
     private val viewModel by viewModels<NewStoryViewModel> {
         NewStoryViewModelFactory.getInstance(applicationContext)
     }
@@ -29,7 +29,7 @@ class NewStoryDetailActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNewStoryDetailBinding.inflate(layoutInflater)
+        binding = ActivityNewStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.cameraButton.setOnClickListener(this)
