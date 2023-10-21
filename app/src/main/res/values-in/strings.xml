@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_image_illustration">Ilustrasi Gambar Aplikasi</string>
+    <string name="welcome">Selamat Datang Di Aplikasi. \nSilahkan Login</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Kata Sandi</string>
+    <string name="login">Login</string>
+    <string name="or">atau</string>
+    <string name="register">Buat Akun Baru</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="back_button">Kembali</string>
+    <string name="welcome_logo">Logo Selamat Datang</string>
+    <string name="add_new_story">Tambah Cerita Baru</string>
+    <string name="story">Cerita</string>
+    <string name="pick_from_camera">Ambil Dari Kamera</string>
+    <string name="pick_from_gallery">Ambil Dari Galeri</string>
+    <string name="to_be_uploaded">Yang akan diunggah</string>
+    <string name="upload_story">Unggah Cerita</string>
+    <string name="type_description_here">Ketik deskripsi Di sini . . .</string>
+    <string name="logout">Keluar</string>
+    <string name="please_input_a_valid_email_that_contains_web_domain">Mohon masukkan email dengan format yang benar @web.domain</string>
+    <string name="password_must_be_more_than_8_characters">Kata Sandi Tidak Boleh Kurang Dari 8 karakter</string>
+</resources>

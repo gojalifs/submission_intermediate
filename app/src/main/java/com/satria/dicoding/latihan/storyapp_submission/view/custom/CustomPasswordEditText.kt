@@ -2,6 +2,7 @@ package com.satria.dicoding.latihan.storyapp_submission.view.custom
 
 import android.content.Context
 import android.util.AttributeSet
+import com.satria.dicoding.latihan.storyapp_submission.R
 
 class CustomPasswordEditText : AppCompatValidationEditText {
     constructor(context: Context) : super(context)
@@ -18,7 +19,7 @@ class CustomPasswordEditText : AppCompatValidationEditText {
         if (text.toString().length >= 8) {
             setValidationError(null)
         } else {
-            setValidationError("Password must be more than 8 characters")
+            setValidationError(context.getString(R.string.password_must_be_more_than_8_characters))
         }
     }
 }

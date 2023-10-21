@@ -2,6 +2,7 @@ package com.satria.dicoding.latihan.storyapp_submission.view.custom
 
 import android.content.Context
 import android.util.AttributeSet
+import com.satria.dicoding.latihan.storyapp_submission.R
 
 class CustomEmailEditText : AppCompatValidationEditText {
     constructor(context: Context) : super(context)
@@ -18,7 +19,7 @@ class CustomEmailEditText : AppCompatValidationEditText {
         if (isValidEmail()) {
             setValidationError(null)
         } else {
-            setValidationError("Please input a valid email that contains @web.domain")
+            setValidationError(context.getString(R.string.please_input_a_valid_email_that_contains_web_domain))
         }
     }
 

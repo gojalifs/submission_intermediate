@@ -1,4 +1,4 @@
-package com.satria.dicoding.latihan.storyapp_submission.view.login
+package com.satria.dicoding.latihan.storyapp_submission.view.auth.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,19 +10,20 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.satria.dicoding.latihan.storyapp_submission.R
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
-import com.satria.dicoding.latihan.storyapp_submission.data.factory.LoginViewModelFactory
+import com.satria.dicoding.latihan.storyapp_submission.data.factory.AuthViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.data.factory.MainViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.SessionPreferences
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.dataStore
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityLoginBinding
+import com.satria.dicoding.latihan.storyapp_submission.view.auth.AuthViewModel
+import com.satria.dicoding.latihan.storyapp_submission.view.auth.register.RegisterActivity
 import com.satria.dicoding.latihan.storyapp_submission.view.home.HomeActivity
 import com.satria.dicoding.latihan.storyapp_submission.view.init.MainViewModel
-import com.satria.dicoding.latihan.storyapp_submission.view.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private val viewModel by viewModels<LoginViewModel> {
-        LoginViewModelFactory.getInstance()
+    private val viewModel by viewModels<AuthViewModel> {
+        AuthViewModelFactory.getInstance()
     }
     private lateinit var sessionViewModel: MainViewModel
 

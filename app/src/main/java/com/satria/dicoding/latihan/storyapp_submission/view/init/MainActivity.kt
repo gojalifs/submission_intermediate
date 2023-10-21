@@ -8,8 +8,8 @@ import com.satria.dicoding.latihan.storyapp_submission.data.factory.MainViewMode
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.SessionPreferences
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.dataStore
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityMainBinding
+import com.satria.dicoding.latihan.storyapp_submission.view.auth.login.LoginActivity
 import com.satria.dicoding.latihan.storyapp_submission.view.home.HomeActivity
-import com.satria.dicoding.latihan.storyapp_submission.view.login.LoginActivity
 
 
 class MainActivity : AppCompatActivity() {

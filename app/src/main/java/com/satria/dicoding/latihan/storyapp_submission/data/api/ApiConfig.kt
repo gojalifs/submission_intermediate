@@ -26,7 +26,7 @@ object ApiConfig {
             .addInterceptor(authInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
-            .build()
+        .build()
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)

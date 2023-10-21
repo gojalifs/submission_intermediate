@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Story App - Submission</string>
+    <string name="app_name" translatable="false">Story App - Submission</string>
     <string name="app_image_illustration">App Image Illustration</string>
     <string name="welcome">Welcome To Story App. \nPlease Login</string>
     <string name="hint_email">Email</string>
@@ -8,7 +8,7 @@
     <string name="or">or</string>
     <string name="register">Create New Account</string>
     <string name="full_name">Full Name</string>
-    <string name="back_button">Back Button</string>
+    <string name="back_button">Back</string>
     <string name="welcome_logo">Welcome Logo</string>
     <string name="add_new_story">Add New Story</string>
     <string name="story">Story</string>
@@ -18,4 +18,6 @@
     <string name="upload_story">Upload Story</string>
     <string name="type_description_here">Type description here . . .</string>
     <string name="logout">Logout</string>
+    <string name="please_input_a_valid_email_that_contains_web_domain">Please input a valid email that contains @web.domain</string>
+    <string name="password_must_be_more_than_8_characters">Password must not be less than 8 characters</string>
 </resources>

@@ -78,16 +78,16 @@ object Utils {
         var streamLength: Int
         do {
             val bmpStream = ByteArrayOutputStream()
-            bitmap?.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpStream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, bmpStream)
             val bmpPicByteArray = bmpStream.toByteArray()
             streamLength = bmpPicByteArray.size
             compressQuality -= 5
         } while (streamLength > MAXIMAL_SIZE)
-        bitmap?.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
+        bitmap.compress(Bitmap.CompressFormat.JPEG, compressQuality, FileOutputStream(file))
         return file
     }
 
-    private fun Bitmap.getRotatedBitmap(file: File): Bitmap? {
+    private fun Bitmap.getRotatedBitmap(file: File): Bitmap {
         val orientation = ExifInterface(file).getAttributeInt(
             ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED
         )
@@ -100,7 +100,7 @@ object Utils {
         }
     }
 
-    private fun rotateImage(source: Bitmap, angle: Float): Bitmap? {
+    private fun rotateImage(source: Bitmap, angle: Float): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(angle)
         return Bitmap.createBitmap(

@@ -1,4 +1,4 @@
-package com.satria.dicoding.latihan.storyapp_submission.view.register
+package com.satria.dicoding.latihan.storyapp_submission.view.auth.register
 
 import android.os.Bundle
 import android.view.View
@@ -8,13 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.satria.dicoding.latihan.storyapp_submission.R
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
-import com.satria.dicoding.latihan.storyapp_submission.data.factory.RegisterViewModelFactory
+import com.satria.dicoding.latihan.storyapp_submission.data.factory.AuthViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityRegisterBinding
+import com.satria.dicoding.latihan.storyapp_submission.view.auth.AuthViewModel
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
-    private val viewModel by viewModels<RegisterViewModel> {
-        RegisterViewModelFactory.getInstance()
+    private val viewModel by viewModels<AuthViewModel> {
+        AuthViewModelFactory.getInstance()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

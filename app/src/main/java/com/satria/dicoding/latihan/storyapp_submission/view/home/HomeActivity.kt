@@ -17,8 +17,8 @@ import com.satria.dicoding.latihan.storyapp_submission.data.prefs.SessionPrefere
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.dataStore
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityHomeBinding
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.ListStoryItem
+import com.satria.dicoding.latihan.storyapp_submission.view.auth.login.LoginActivity
 import com.satria.dicoding.latihan.storyapp_submission.view.init.MainViewModel
-import com.satria.dicoding.latihan.storyapp_submission.view.login.LoginActivity
 import com.satria.dicoding.latihan.storyapp_submission.view.new_story.NewStoryActivity
 
 class HomeActivity : AppCompatActivity() {

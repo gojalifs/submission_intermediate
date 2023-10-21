@@ -4,21 +4,16 @@ import android.content.Context
 import com.satria.dicoding.latihan.storyapp_submission.data.api.ApiConfig
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.SessionPreferences
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.dataStore
-import com.satria.dicoding.latihan.storyapp_submission.data.repository.LoginRepository
-import com.satria.dicoding.latihan.storyapp_submission.data.repository.RegisterRepository
+import com.satria.dicoding.latihan.storyapp_submission.data.repository.AuthRepository
 import com.satria.dicoding.latihan.storyapp_submission.data.repository.StoryRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
 object Injection {
-    fun provideRegisterRepository(): RegisterRepository {
-        val apiService = ApiConfig.getApiService()
-        return RegisterRepository.getInstance(apiService)
-    }
 
-    fun provideLoginRepository(): LoginRepository {
+    fun provideLoginRepository(): AuthRepository {
         val apiService = ApiConfig.getApiService()
-        return LoginRepository.getInstance(apiService)
+        return AuthRepository.getInstance(apiService)
     }
 
     fun provideStoryRepository(context: Context): StoryRepository {
