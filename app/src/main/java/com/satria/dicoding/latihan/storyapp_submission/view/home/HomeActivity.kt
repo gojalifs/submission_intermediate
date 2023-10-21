@@ -1,7 +1,6 @@
 package com.satria.dicoding.latihan.storyapp_submission.view.home
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,21 +20,14 @@ class HomeActivity : AppCompatActivity() {
         HomeViewModelFactory.getInstance(applicationContext)
     }
 
-    private var stories: MutableList<ListStoryItem?> = mutableListOf()
     private val resultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode == NewStoryDetailActivity.RESULT_CODE && it.data != null) {
-            val newStory = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.data!!.getParcelableExtra(
-                    NewStoryDetailActivity.EXTRA_DATA,
-                    ListStoryItem::class.java
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                it.data!!.getParcelableExtra(NewStoryDetailActivity.EXTRA_DATA)
+    ) { result ->
+        if (result.resultCode == NewStoryDetailActivity.RESULT_CODE && result.data != null) {
+            val value = result.data?.getBooleanExtra(NewStoryDetailActivity.EXTRA_DATA, false)
+            if (value!!) {
+                getStories()
             }
-            stories.add(newStory)
         }
     }
 
@@ -72,7 +64,7 @@ class HomeActivity : AppCompatActivity() {
 
                     is ResultState.Success -> {
                         showLoading(false)
-                        stories = state.data.listStory ?: mutableListOf()
+                        val stories = state.data.listStory ?: mutableListOf()
                         setStories(stories)
                     }
 

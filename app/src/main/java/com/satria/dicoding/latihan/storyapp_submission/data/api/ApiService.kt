@@ -1,12 +1,17 @@
 package com.satria.dicoding.latihan.storyapp_submission.data.api
 
+import com.satria.dicoding.latihan.storyapp_submission.model.api_response.AddStoryResponse
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.AllStoryResponse
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.LoginResponse
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.RegisterResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface ApiService {
     @FormUrlEncoded
@@ -26,4 +31,11 @@ interface ApiService {
 
     @GET("stories")
     suspend fun getStories(): AllStoryResponse
+
+    @Multipart
+    @POST("stories")
+    suspend fun addStory(
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody,
+    ): AddStoryResponse
 }

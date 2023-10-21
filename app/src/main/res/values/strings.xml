@@ -12,4 +12,10 @@
     <string name="welcome_logo">Welcome Logo</string>
     <string name="add_new_story">Add New Story</string>
     <string name="story">Story</string>
+    <string name="pick_from_camera">Pick From Camera</string>
+    <string name="pick_from_gallery">pick From Gallery</string>
+    <string name="to_be_uploaded">To be uploaded</string>
+    <string name="upload_story">Upload Story</string>
+    <string name="type_description_here">Type description here . . .</string>
+    <string name="logout">Logout</string>
 </resources>

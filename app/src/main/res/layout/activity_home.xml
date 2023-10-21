@@ -6,13 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".view.home.HomeActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_story"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="16dp"
-        android:visibility="invisible"
-        tools:listitem="@layout/story_card" />
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/option_menu"
+            app:title="@string/app_name" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_story"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
+            android:visibility="invisible"
+            tools:listitem="@layout/story_card" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_story"
@@ -33,7 +52,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
 
             <include layout="@layout/story_card_shimmer" />
 
