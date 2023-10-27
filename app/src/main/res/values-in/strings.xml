@@ -19,4 +19,5 @@
     <string name="logout">Keluar</string>
     <string name="please_input_a_valid_email_that_contains_web_domain">Mohon masukkan email dengan format yang benar @web.domain</string>
     <string name="password_must_be_more_than_8_characters">Kata Sandi Tidak Boleh Kurang Dari 8 karakter</string>
+    <string name="change_app_language">Ubah Bahasa Aplikasi</string>
 </resources>

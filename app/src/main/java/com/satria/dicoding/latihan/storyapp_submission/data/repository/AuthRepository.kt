@@ -12,6 +12,7 @@ class AuthRepository private constructor(private val apiService: ApiService) {
 
         try {
             val loginResponse = apiService.login(email, password)
+            println("login response $loginResponse")
             emit(ResultState.Success(loginResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.message()

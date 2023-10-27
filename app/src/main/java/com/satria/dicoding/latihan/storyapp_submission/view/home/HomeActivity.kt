@@ -6,28 +6,23 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.satria.dicoding.latihan.storyapp_submission.R
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.factory.HomeViewModelFactory
-import com.satria.dicoding.latihan.storyapp_submission.data.factory.MainViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.SessionPreferences
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.dataStore
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityHomeBinding
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.ListStoryItem
-import com.satria.dicoding.latihan.storyapp_submission.view.auth.login.LoginActivity
-import com.satria.dicoding.latihan.storyapp_submission.view.init.MainViewModel
 import com.satria.dicoding.latihan.storyapp_submission.view.new_story.NewStoryActivity
+import com.satria.dicoding.latihan.storyapp_submission.view.setting.SettingActivity
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private val viewModel by viewModels<HomeViewModel> {
         HomeViewModelFactory.getInstance(applicationContext)
     }
-
-    private lateinit var sessionViewModel: MainViewModel
 
     private val resultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -45,10 +40,6 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val preferences = SessionPreferences.getInstance(applicationContext.dataStore)
-        sessionViewModel = ViewModelProvider(
-            this, MainViewModelFactory(preferences)
-        )[MainViewModel::class.java]
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvStory.layoutManager = layoutManager
@@ -62,11 +53,8 @@ class HomeActivity : AppCompatActivity() {
 
         binding.appBar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.menu_logout -> {
-                    sessionViewModel.deleteToken()
-                    val intent = Intent(this, LoginActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                R.id.menu_setting -> {
+                    val intent = Intent(this, SettingActivity::class.java)
                     startActivity(intent)
                     true
                 }
