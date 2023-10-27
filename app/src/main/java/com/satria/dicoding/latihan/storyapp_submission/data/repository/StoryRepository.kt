@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.liveData
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.api.ApiService
+import com.satria.dicoding.latihan.storyapp_submission.model.api_response.AllStoryResponse
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -13,11 +14,15 @@ import java.io.File
 import java.net.UnknownHostException
 
 class StoryRepository private constructor(private val apiService: ApiService) {
-    fun getStories() = liveData {
+    fun getStories(isMapsView: Boolean) = liveData {
         emit(ResultState.Loading)
 
         try {
-            val storyResponse = apiService.getStories()
+            val storyResponse: AllStoryResponse = if (isMapsView) {
+                apiService.getStoriesWithLocation()
+            } else {
+                apiService.getStories()
+            }
 
             emit(ResultState.Success(storyResponse))
         } catch (e: HttpException) {

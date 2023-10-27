@@ -1,20 +1,31 @@
 package com.satria.dicoding.latihan.storyapp_submission.view.map
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.satria.dicoding.latihan.storyapp_submission.R
+import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
+import com.satria.dicoding.latihan.storyapp_submission.data.factory.MapViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityMapsBinding
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    private val viewModel by viewModels<MapViewModel> {
+        MapViewModelFactory.getInstance(applicationContext)
+    }
+    private val latLngBoundsBuilder = LatLngBounds.builder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,21 +39,61 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        addMarkers()
     }
+
+    private fun addMarkers() {
+        viewModel.getStories().observe(this) { result ->
+            when (result) {
+                is ResultState.Success -> {
+                    showLoading(false)
+                    val places = result.data.listStory
+                    Log.d("TAG", "addMarkers: ${places?.size}")
+                    places?.forEach { story ->
+                        val lat = story?.lat?.toDouble() ?: 0.0
+                        val long = story?.lon?.toDouble() ?: 0.0
+                        val latLng = LatLng(lat, long)
+                        mMap.addMarker(
+                            MarkerOptions()
+                                .position(latLng)
+                                .title("Story By ${story?.name}")
+                        )
+                        latLngBoundsBuilder.include(latLng)
+                    }
+
+                    val bounds = latLngBoundsBuilder.build()
+                    mMap.animateCamera(
+                        CameraUpdateFactory.newLatLngBounds(
+                            bounds,
+                            resources.displayMetrics.widthPixels,
+                            resources.displayMetrics.heightPixels,
+                            300
+                        )
+                    )
+                }
+
+                is ResultState.Loading -> showLoading(true)
+                is ResultState.Error -> {
+                    showLoading(false)
+                    Toast.makeText(this, getString(R.string.error_getting_data), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        with(binding) {
+            if (isLoading) {
+                progressIndicator.visibility = View.VISIBLE
+            } else {
+                progressIndicator.visibility = View.INVISIBLE
+            }
+
+        }
+    }
+
 }

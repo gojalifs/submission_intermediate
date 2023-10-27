@@ -21,4 +21,7 @@
     <string name="please_input_a_valid_email_that_contains_web_domain">Please input a valid email that contains @web.domain</string>
     <string name="password_must_be_more_than_8_characters">Password must not be less than 8 characters</string>
     <string name="change_app_language">Change App Language</string>
+    <string name="map_view">Map View</string>
+    <string name="settings">Settings</string>
+    <string name="error_getting_data">Error getting data, try again . . .</string>
 </resources>

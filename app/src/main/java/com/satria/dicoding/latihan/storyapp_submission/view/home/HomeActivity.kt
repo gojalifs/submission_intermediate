@@ -16,6 +16,7 @@ import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.factory.HomeViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityHomeBinding
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.ListStoryItem
+import com.satria.dicoding.latihan.storyapp_submission.view.map.MapsActivity
 import com.satria.dicoding.latihan.storyapp_submission.view.new_story.NewStoryActivity
 import com.satria.dicoding.latihan.storyapp_submission.view.setting.SettingActivity
 
@@ -56,6 +57,12 @@ class HomeActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.menu_setting -> {
                     val intent = Intent(this, SettingActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.menu_map -> {
+                    val intent = Intent(this, MapsActivity::class.java)
                     startActivity(intent)
                     true
                 }
