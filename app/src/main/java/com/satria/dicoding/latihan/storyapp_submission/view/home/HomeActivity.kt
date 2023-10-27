@@ -2,17 +2,18 @@ package com.satria.dicoding.latihan.storyapp_submission.view.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.satria.dicoding.latihan.storyapp_submission.R
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.factory.HomeViewModelFactory
-import com.satria.dicoding.latihan.storyapp_submission.data.prefs.SessionPreferences
-import com.satria.dicoding.latihan.storyapp_submission.data.prefs.dataStore
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityHomeBinding
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.ListStoryItem
 import com.satria.dicoding.latihan.storyapp_submission.view.new_story.NewStoryActivity
@@ -71,6 +72,15 @@ class HomeActivity : AppCompatActivity() {
         getStories()
     }
 
+    override fun onRestoreInstanceState(
+        savedInstanceState: Bundle?,
+        persistentState: PersistableBundle?
+    ) {
+        AppCompatDelegate.getApplicationLocales()
+
+        super.onRestoreInstanceState(savedInstanceState, persistentState)
+    }
+
     private fun getStories() {
         viewModel.getStories().observe(this) { state ->
             if (state != null) {
@@ -87,7 +97,7 @@ class HomeActivity : AppCompatActivity() {
 
                     is ResultState.Error -> {
                         showLoading(false)
-                        /// TODO: add error
+                        Toast.makeText(this, "Failed getting data", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
