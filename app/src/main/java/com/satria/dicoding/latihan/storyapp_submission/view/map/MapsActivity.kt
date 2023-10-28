@@ -51,14 +51,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 is ResultState.Success -> {
                     showLoading(false)
                     val stories = result.data.listStory
-                    stories?.forEach { story ->
-                        val lat = story?.lat?.toDouble() ?: 0.0
-                        val long = story?.lon?.toDouble() ?: 0.0
+                    stories.forEach { story ->
+                        val lat = story.lat?.toDouble() ?: 0.0
+                        val long = story.lon?.toDouble() ?: 0.0
                         val latLng = LatLng(lat, long)
                         mMap.addMarker(
                             MarkerOptions()
                                 .position(latLng)
-                                .title("Story By ${story?.name}")
+                                .title("Story By ${story.name}")
                         )
                         latLngBoundsBuilder.include(latLng)
                     }
