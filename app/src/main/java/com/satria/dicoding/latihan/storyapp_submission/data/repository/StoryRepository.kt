@@ -1,10 +1,17 @@
 package com.satria.dicoding.latihan.storyapp_submission.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.api.ApiService
+import com.satria.dicoding.latihan.storyapp_submission.data.paging_source.StoriesPagingSource
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.AllStoryResponse
+import com.satria.dicoding.latihan.storyapp_submission.model.api_response.ListStoryItem
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -14,15 +21,20 @@ import java.io.File
 import java.net.UnknownHostException
 
 class StoryRepository private constructor(private val apiService: ApiService) {
-    fun getStories(isMapsView: Boolean) = liveData {
+
+    fun getStories(): LiveData<PagingData<ListStoryItem>> {
+
+        return Pager(
+            config = PagingConfig(pageSize = 20),
+            pagingSourceFactory = { StoriesPagingSource(apiService) },
+        ).liveData
+    }
+
+    fun getStoriesByMap() = liveData {
         emit(ResultState.Loading)
 
         try {
-            val storyResponse: AllStoryResponse = if (isMapsView) {
-                apiService.getStoriesWithLocation()
-            } else {
-                apiService.getStories()
-            }
+            val storyResponse: AllStoryResponse = apiService.getStoriesWithLocation()
 
             emit(ResultState.Success(storyResponse))
         } catch (e: HttpException) {

@@ -6,15 +6,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.satria.dicoding.latihan.storyapp_submission.databinding.StoryCardBinding
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.ListStoryItem
 import com.satria.dicoding.latihan.storyapp_submission.view.story_detail.StoryDetailActivity
 
-class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class StoryAdapter : PagingDataAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = StoryCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
@@ -22,14 +22,13 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val storyItem = getItem(position)
-        holder.bind(storyItem)
-
+        holder.bind(storyItem ?: ListStoryItem())
         holder.itemView.setOnClickListener {
 
             val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 holder.itemView.context as Activity,
-                Pair(holder.binding.imStoryImage, "im_story_image"),
-                Pair(holder.binding.tvUserName, "tv_user_name")
+                Pair(holder.storyCardBinding.imStoryImage, "im_story_image"),
+                Pair(holder.storyCardBinding.tvUserName, "tv_user_name")
 
             )
             val intent = Intent(holder.itemView.context, StoryDetailActivity::class.java)
@@ -38,11 +37,12 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_
         }
     }
 
-    class MyViewHolder(val binding: StoryCardBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class MyViewHolder(val storyCardBinding: StoryCardBinding) :
+        RecyclerView.ViewHolder(storyCardBinding.root) {
         fun bind(storyItem: ListStoryItem) {
-            Glide.with(binding.root.context).load(storyItem.photoUrl).into(binding.imStoryImage)
-            binding.tvUserName.text = storyItem.name
+            Glide.with(storyCardBinding.root.context).load(storyItem.photoUrl)
+                .into(storyCardBinding.imStoryImage)
+            storyCardBinding.tvUserName.text = storyItem.name
         }
     }
 
@@ -58,8 +58,6 @@ class StoryAdapter : ListAdapter<ListStoryItem, StoryAdapter.MyViewHolder>(DIFF_
             ): Boolean {
                 return oldItem == newItem
             }
-
-
         }
     }
 }

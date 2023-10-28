@@ -23,4 +23,5 @@
     <string name="map_view">Tampilan Map</string>
     <string name="settings">Pengaturan</string>
     <string name="error_getting_data">"Gagal mendapatkan data, coba lagi . . . "</string>
+    <string name="retry">Coba Lagi</string>
 </resources>
