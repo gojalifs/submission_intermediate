@@ -13,6 +13,7 @@ import com.satria.dicoding.latihan.storyapp_submission.data.prefs.SessionPrefere
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.dataStore
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivitySettingBinding
 import com.satria.dicoding.latihan.storyapp_submission.view.auth.login.LoginActivity
+import com.satria.dicoding.latihan.storyapp_submission.view.home.HomeActivity
 import com.satria.dicoding.latihan.storyapp_submission.view.init.MainViewModel
 
 
@@ -54,11 +55,17 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
             binding.imId -> {
                 val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags("in-ID")
                 AppCompatDelegate.setApplicationLocales(appLocale)
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
             }
 
             binding.imEn -> {
-                val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags("en-EN")
+                val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags("en-US")
                 AppCompatDelegate.setApplicationLocales(appLocale)
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
             }
 
             binding.btnLogout -> {

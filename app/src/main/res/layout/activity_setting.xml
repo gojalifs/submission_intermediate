@@ -28,6 +28,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_bar" />
 
+    <TextView
+        android:id="@+id/tv_change_lang_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="@string/change_app_prompt"
+        app:layout_constraintTop_toBottomOf="@+id/tv_change_lang"
+        tools:layout_editor_absoluteX="16dp" />
+
     <ImageView
         android:id="@+id/im_id"
         android:layout_width="50dp"
@@ -38,17 +47,16 @@
         android:src="@drawable/indonesia"
         app:layout_constraintEnd_toStartOf="@id/im_en"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_change_lang" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_change_lang_prompt" />
 
     <ImageView
         android:id="@+id/im_en"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
         android:src="@drawable/england"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/im_id"
-        app:layout_constraintTop_toBottomOf="@+id/tv_change_lang" />
+        app:layout_constraintTop_toTopOf="@id/im_id" />
 
     <Button
         android:id="@+id/btn_logout"
