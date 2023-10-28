@@ -1,7 +1,6 @@
 package com.satria.dicoding.latihan.storyapp_submission.view.map
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -41,6 +40,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.uiSettings.isZoomControlsEnabled = true
 
         addMarkers()
     }
@@ -50,9 +50,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             when (result) {
                 is ResultState.Success -> {
                     showLoading(false)
-                    val places = result.data.listStory
-                    Log.d("TAG", "addMarkers: ${places?.size}")
-                    places?.forEach { story ->
+                    val stories = result.data.listStory
+                    stories?.forEach { story ->
                         val lat = story?.lat?.toDouble() ?: 0.0
                         val long = story?.lon?.toDouble() ?: 0.0
                         val latLng = LatLng(lat, long)
@@ -92,7 +91,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             } else {
                 progressIndicator.visibility = View.INVISIBLE
             }
-
         }
     }
 
