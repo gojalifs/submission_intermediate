@@ -62,18 +62,18 @@ class HomeViewModelTest {
     @Test
     fun `when Get Story Empty Should Return No Data`() = runTest {
         val data: PagingData<ListStoryItem> = PagingData.from(emptyList())
-        val expectedQuote = MutableLiveData<PagingData<ListStoryItem>>()
-        expectedQuote.value = data
-        Mockito.`when`(storyRepository.getStories()).thenReturn(expectedQuote)
+        val expectedStory = MutableLiveData<PagingData<ListStoryItem>>()
+        expectedStory.value = data
+        Mockito.`when`(storyRepository.getStories()).thenReturn(expectedStory)
         val homeViewModel = HomeViewModel(storyRepository)
-        val actualQuote: PagingData<ListStoryItem> = homeViewModel.getStories().getOrAwaitValue()
+        val actualStory: PagingData<ListStoryItem> = homeViewModel.getStories().getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = StoryAdapter.DIFF_CALLBACK,
             updateCallback = noopListUpdateCallback,
             workerDispatcher = Dispatchers.Main,
         )
-        differ.submitData(actualQuote)
+        differ.submitData(actualStory)
         Assert.assertEquals(0, differ.snapshot().size)
     }
 }
