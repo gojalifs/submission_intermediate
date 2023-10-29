@@ -5,11 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
         tools:context=".view.story_detail.StoryDetailActivity">
+
+        <include
+            android:id="@+id/custom_app_bar"
+            layout="@layout/custom_action_bar" />
 
         <ImageView
             android:id="@+id/im_story_image"
@@ -20,21 +25,8 @@
             android:transitionName="im_story_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/custom_app_bar"
             tools:src="@tools:sample/backgrounds/scenic" />
-
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/circle_shape"
-            android:contentDescription="@string/back_button"
-            android:padding="4dp"
-            android:src="@drawable/round_arrow_back_ios_new_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/colorOnBackground"
-            tools:layout_editor_absoluteX="16dp" />
 
         <TextView
             android:id="@+id/tv_user_name"
