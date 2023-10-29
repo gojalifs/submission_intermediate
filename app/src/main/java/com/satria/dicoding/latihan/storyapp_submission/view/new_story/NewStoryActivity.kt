@@ -2,25 +2,51 @@ package com.satria.dicoding.latihan.storyapp_submission.view.new_story
 
 import android.Manifest
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.satria.dicoding.latihan.storyapp_submission.R
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.factory.NewStoryViewModelFactory
 import com.satria.dicoding.latihan.storyapp_submission.databinding.ActivityNewStoryBinding
 import com.satria.dicoding.latihan.storyapp_submission.utils.Utils
 import com.satria.dicoding.latihan.storyapp_submission.utils.Utils.reduceFileSize
+import java.util.concurrent.TimeUnit
 
-class NewStoryActivity : AppCompatActivity(), View.OnClickListener {
+class NewStoryActivity : AppCompatActivity(), View.OnClickListener,
+    CompoundButton.OnCheckedChangeListener {
     private lateinit var binding: ActivityNewStoryBinding
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
+    private var lon: Double? = null
+    private var lat: Double? = null
+    private var isLocationAdded = false
+
     private val viewModel by viewModels<NewStoryViewModel> {
         NewStoryViewModelFactory.getInstance(applicationContext)
     }
@@ -35,8 +61,21 @@ class NewStoryActivity : AppCompatActivity(), View.OnClickListener {
         binding.cameraButton.setOnClickListener(this)
         binding.galleryButton.setOnClickListener(this)
         binding.uploadButton.setOnClickListener(this)
+        binding.checkAddMyLocation.setOnCheckedChangeListener(this)
+
+        binding.edtDescription.addTextChangedListener {
+            binding.uploadButton.isEnabled = !it.isNullOrEmpty()
+        }
+
+        createLocationCallback()
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
+    override fun onPause() {
+        super.onPause()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
 
     override fun onClick(v: View) {
         when (v) {
@@ -45,32 +84,155 @@ class NewStoryActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             binding.cameraButton -> {
-                if (!grantPermission()) {
-                    requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+                if (!checkPermission(CAMERA_PERMISSION)) {
+                    requestPermissionLauncher.launch(arrayOf(CAMERA_PERMISSION))
+                } else {
+                    takeCamera()
                 }
-                takeCamera()
             }
 
             binding.uploadButton -> {
-                addStory()
+                if (currentImageUri == null) {
+                    showToast(getString(R.string.please_add_image))
+                    return
+                }
+                if (binding.edtDescription.text.isNullOrEmpty()) {
+                    showToast(getString(R.string.please_add_description))
+                    return
+                }
+                if (isLocationAdded) {
+                    if (lat != null && lon != null) {
+                        addStory()
+                    } else {
+                        showToast(getString(R.string.waiting_for_your_location_data_retrieved))
+                    }
+                } else {
+                    addStory()
+                }
             }
         }
     }
 
-    private fun grantPermission() =
-        ContextCompat.checkSelfPermission(
-            this,
-            REQUIRED_PERMISSION
+    override fun onCheckedChanged(p0: CompoundButton?, isChecked: Boolean) {
+        if (isChecked) {
+            getMyLocation()
+            createLocationRequest()
+            isLocationAdded = true
+            if (lat == null || lon == null) {
+                binding.uploadButton.text = getString(R.string.getting_your_location)
+                binding.uploadButton.isEnabled = false
+            }
+        } else {
+            isLocationAdded = false
+            with(binding) {
+                checkAddMyLocation.isChecked = false
+                uploadButton.text = getString(R.string.upload_story)
+                if (edtDescription.text.isNotEmpty() && currentImageUri != null) {
+                    uploadButton.isEnabled = true
+                }
+            }
+        }
+    }
+
+    private fun createLocationCallback() {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {}
+        }
+    }
+
+    private fun getMyLocation() {
+        if (checkPermission(FINE_LOCATION_PERMISSION) && checkPermission(COARSE_LOCATION_PERMISSION)) {
+            fusedLocationClient.getCurrentLocation(
+                Priority.PRIORITY_HIGH_ACCURACY,
+                object : CancellationToken() {
+                    override fun onCanceledRequested(p0: OnTokenCanceledListener) =
+                        CancellationTokenSource().token
+
+                    override fun isCancellationRequested() = false
+                })
+                .addOnSuccessListener { location: Location? ->
+                    if (location == null)
+                        showToast(getString(R.string.cannot_get_location))
+                    else {
+                        lat = location.latitude
+                        lon = location.longitude
+                        showToast(getString(R.string.location_retrieved))
+                        with(binding) {
+                            uploadButton.text = getString(R.string.upload_story)
+                            if (edtDescription.text.isNotEmpty() && currentImageUri != null) {
+                                uploadButton.isEnabled = true
+                            }
+                        }
+                    }
+                }
+
+        } else {
+            binding.checkAddMyLocation.isChecked = false
+            requestPermissionLauncher.launch(arrayOf(FINE_LOCATION_PERMISSION))
+        }
+    }
+
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this, permission
         ) == PackageManager.PERMISSION_GRANTED
+    }
 
     private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            Toast.makeText(this, "Permission request granted", Toast.LENGTH_LONG).show()
-        } else {
-            Toast.makeText(this, "Permission request denied", Toast.LENGTH_LONG).show()
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions[FINE_LOCATION_PERMISSION] ?: false -> {
+                getMyLocation()
+            }
+
+            permissions[COARSE_LOCATION_PERMISSION] ?: false -> {
+                getMyLocation()
+            }
+
+            permissions[CAMERA_PERMISSION] ?: false -> {
+                takeCamera()
+            }
         }
+    }
+
+    private val resolutionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) { result ->
+            when (result.resultCode) {
+                RESULT_OK ->
+                    Log.i(
+                        "New Story Activity",
+                        "onActivityResult: All location settings are satisfied."
+                    )
+
+                RESULT_CANCELED ->
+                    showToast(getString(R.string.must_activate_gps))
+            }
+        }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest.Builder(TimeUnit.SECONDS.toMillis(1))
+            .setMaxUpdateDelayMillis(TimeUnit.SECONDS.toMillis(1))
+            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+            .build()
+
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        val client = LocationServices.getSettingsClient(this)
+        client.checkLocationSettings(builder.build())
+            .addOnSuccessListener { showToast(getString(R.string.getting_your_location)) }
+            .addOnFailureListener { exception ->
+                if (exception is ResolvableApiException) {
+                    try {
+                        resolutionLauncher.launch(
+                            IntentSenderRequest.Builder(exception.resolution).build()
+                        )
+                    } catch (sendEx: IntentSender.SendIntentException) {
+                        showToast(sendEx.message.toString())
+                    }
+                }
+            }
     }
 
     private fun addStory() {
@@ -78,12 +240,12 @@ class NewStoryActivity : AppCompatActivity(), View.OnClickListener {
         currentImageUri?.let {
             val imageFile = Utils.getFileFromUri(it, this).reduceFileSize()
             val description = binding.edtDescription.text.toString()
-
-
-            viewModel.addNewStory(imageFile, description).observe(this) { state ->
+            viewModel.addNewStory(imageFile, description, lat, lon).observe(this) { state ->
                 if (state != null) {
                     when (state) {
-                        is ResultState.Loading -> {}
+                        is ResultState.Loading -> {
+                            showLoading(true)
+                        }
 
                         is ResultState.Success -> {
                             showLoading(false)
@@ -95,6 +257,7 @@ class NewStoryActivity : AppCompatActivity(), View.OnClickListener {
 
                         is ResultState.Error -> {
                             showLoading(false)
+                            showToast(state.error)
                         }
                     }
                 }
@@ -155,6 +318,8 @@ class NewStoryActivity : AppCompatActivity(), View.OnClickListener {
     companion object {
         const val RESULT_CODE = 101
         const val EXTRA_DATA = "extra_data"
-        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+        private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
+        private const val FINE_LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
+        private const val COARSE_LOCATION_PERMISSION = Manifest.permission.ACCESS_COARSE_LOCATION
     }
 }

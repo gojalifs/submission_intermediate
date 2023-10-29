@@ -67,15 +67,19 @@ class StoryRepository private constructor(
 
     }
 
-    fun addStory(image: File, description: String) = liveData {
+    fun addStory(image: File, description: String, lat: Double?, long: Double?) = liveData {
         emit(ResultState.Loading)
-        val requestBody = description.toRequestBody("text/plain".toMediaType())
+        val descriptionBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = image.asRequestBody("image/jpeg".toMediaType())
         val multipartBody = MultipartBody.Part.createFormData(
             "photo", image.name, requestImageFile
         )
         try {
-            val successResponse = apiService.addStory(multipartBody, requestBody)
+            val successResponse = if (lat == null || long == null) {
+                apiService.addStory(multipartBody, descriptionBody, lat = null, lon = null)
+            } else {
+                apiService.addStory(multipartBody, descriptionBody, lat, long)
+            }
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.message()
@@ -86,7 +90,7 @@ class StoryRepository private constructor(
                 }
 
                 in 400..499 -> {
-                    emit(ResultState.Error("Request Error. code $code $errorBody"))
+                    emit(ResultState.Error("Request Error. code $code ${e.response()?.errorBody()}"))
                 }
 
                 in 500..599 -> {

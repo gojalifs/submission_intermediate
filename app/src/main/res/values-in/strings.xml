@@ -25,4 +25,12 @@
     <string name="error_getting_data">"Gagal mendapatkan data, coba lagi . . . "</string>
     <string name="retry">Coba Lagi</string>
     <string name="change_app_prompt">Mengubah bahasa akan me-restart aplikasi</string>
+    <string name="add_my_location_to_story">Tambah Lokasi Saya Ke Cerita</string>
+    <string name="cannot_get_location">Tidak berhasil mendapatkan lokasi</string>
+    <string name="must_activate_gps">Kamu harus menghidupkan GPS untuk fitur ini!</string>
+    <string name="getting_your_location">Mencari lokasimu . . .</string>
+    <string name="location_retrieved">Lokasi Didapatkan</string>
+    <string name="please_add_image">Mohon pilih gambar</string>
+    <string name="waiting_for_your_location_data_retrieved">"Menunggu mendapatkan lokasi kamu . . . "</string>
+    <string name="please_add_description">Mohon tambahkan deskripsi</string>
 </resources>

@@ -5,5 +5,6 @@ import com.satria.dicoding.latihan.storyapp_submission.data.repository.StoryRepo
 import java.io.File
 
 class NewStoryViewModel(private val storyRepository: StoryRepository) : ViewModel() {
-    fun addNewStory(image: File, description: String) = storyRepository.addStory(image, description)
+    fun addNewStory(image: File, description: String, lat: Double?, long: Double?) =
+        storyRepository.addStory(image, description, lat, long)
 }

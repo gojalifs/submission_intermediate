@@ -26,4 +26,12 @@
     <string name="error_getting_data">Error getting data, try again . . .</string>
     <string name="retry">Retry</string>
     <string name="change_app_prompt">Changing app language will causing your app to restart</string>
+    <string name="add_my_location_to_story">Add My Location To Story</string>
+    <string name="cannot_get_location">Cannot get location.</string>
+    <string name="must_activate_gps">You must activate GPS to use this feature!</string>
+    <string name="getting_your_location">Getting Your Location . . .</string>
+    <string name="location_retrieved">Location Retrieved</string>
+    <string name="please_add_image">Please Add Image</string>
+    <string name="waiting_for_your_location_data_retrieved">Waiting for your location data retrieved . . .</string>
+    <string name="please_add_description">Please add description</string>
 </resources>
