@@ -3,13 +3,15 @@ package com.satria.dicoding.latihan.storyapp_submission.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
 import com.satria.dicoding.latihan.storyapp_submission.data.ResultState
 import com.satria.dicoding.latihan.storyapp_submission.data.api.ApiService
-import com.satria.dicoding.latihan.storyapp_submission.data.paging_source.StoriesPagingSource
+import com.satria.dicoding.latihan.storyapp_submission.data.local.StoryDatabase
+import com.satria.dicoding.latihan.storyapp_submission.data.remote_mediator.StoryRemoteMediator
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.AllStoryResponse
 import com.satria.dicoding.latihan.storyapp_submission.model.api_response.ListStoryItem
 import okhttp3.MediaType.Companion.toMediaType
@@ -20,13 +22,17 @@ import retrofit2.HttpException
 import java.io.File
 import java.net.UnknownHostException
 
-class StoryRepository private constructor(private val apiService: ApiService) {
+class StoryRepository private constructor(
+    private val storyDatabase: StoryDatabase,
+    private val apiService: ApiService
+) {
 
     fun getStories(): LiveData<PagingData<ListStoryItem>> {
-
+        @OptIn(ExperimentalPagingApi::class)
         return Pager(
-            config = PagingConfig(pageSize = 20),
-            pagingSourceFactory = { StoriesPagingSource(apiService) },
+            config = PagingConfig(pageSize = 10, initialLoadSize = 15),
+            remoteMediator = StoryRemoteMediator(storyDatabase, apiService),
+            pagingSourceFactory = { storyDatabase.storyDao().getStories() },
         ).liveData
     }
 
@@ -98,8 +104,10 @@ class StoryRepository private constructor(private val apiService: ApiService) {
     companion object {
         @Volatile
         private var instance: StoryRepository? = null
-        fun getInstance(apiService: ApiService) = instance ?: synchronized(this) {
-            instance ?: StoryRepository(apiService)
-        }.also { instance = it }
+        private var dbInstance: StoryDatabase? = null
+        fun getInstance(apiService: ApiService, storyDatabase: StoryDatabase) =
+            instance ?: synchronized(this) {
+                instance ?: StoryRepository(storyDatabase, apiService)
+            }.also { instance = it }
     }
 }

@@ -2,6 +2,7 @@ package com.satria.dicoding.latihan.storyapp_submission.data.di
 
 import android.content.Context
 import com.satria.dicoding.latihan.storyapp_submission.data.api.ApiConfig
+import com.satria.dicoding.latihan.storyapp_submission.data.local.StoryDatabase
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.SessionPreferences
 import com.satria.dicoding.latihan.storyapp_submission.data.prefs.dataStore
 import com.satria.dicoding.latihan.storyapp_submission.data.repository.AuthRepository
@@ -20,6 +21,7 @@ object Injection {
         val pref = SessionPreferences.getInstance(context.dataStore)
         val token = runBlocking { pref.getToken().first() }
         val apiService = ApiConfig.getApiService(token)
-        return StoryRepository.getInstance(apiService)
+        val storyDatabase = StoryDatabase.getDatabase(context)
+        return StoryRepository.getInstance(apiService, storyDatabase)
     }
 }
