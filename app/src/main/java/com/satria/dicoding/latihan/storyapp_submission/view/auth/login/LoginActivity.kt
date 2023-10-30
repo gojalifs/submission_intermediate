@@ -53,18 +53,18 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        binding.edtEmail.addTextChangedListener {
+        binding.edtEmailLogin.addTextChangedListener {
             binding.btnLogin.isEnabled = isInputValid()
         }
-        binding.edtPassword.addTextChangedListener {
+        binding.edtPasswordLogin.addTextChangedListener {
             binding.btnLogin.isEnabled = isInputValid()
         }
 
     }
 
     private fun login() {
-        val email = binding.edtEmail.text.toString().trim()
-        val password = binding.edtPassword.text.toString().trim()
+        val email = binding.edtEmailLogin.text.toString().trim()
+        val password = binding.edtPasswordLogin.text.toString().trim()
 
         viewModel.login(email, password).observe(this) { state ->
             if (state != null) {
@@ -99,10 +99,10 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun isInputValid(): Boolean {
-        val mailText = binding.edtEmail.text.toString()
-        val mailError = binding.edtEmail.error
-        val passText = binding.edtPassword.text.toString()
-        val passError = binding.edtPassword.error
+        val mailText = binding.edtEmailLogin.text.toString()
+        val mailError = binding.edtEmailLogin.error
+        val passText = binding.edtPasswordLogin.text.toString()
+        val passError = binding.edtPasswordLogin.error
 
         return (mailText.isNotEmpty() && mailError.isNullOrEmpty() && passText.isNotEmpty() && passError.isNullOrEmpty())
     }

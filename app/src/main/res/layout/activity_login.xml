@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@+id/img_story_illustration" />
 
     <com.satria.dicoding.latihan.storyapp_submission.view.custom.CustomEmailEditText
-        android:id="@+id/edt_email"
+        android:id="@+id/edt_email_login"
         style="@style/EditTextStyle"
         android:layout_marginTop="24dp"
         android:hint="@string/hint_email"
@@ -44,14 +44,14 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_login_text" />
 
     <com.satria.dicoding.latihan.storyapp_submission.view.custom.CustomPasswordEditText
-        android:id="@+id/edt_password"
+        android:id="@+id/edt_password_login"
         style="@style/EditTextStyle"
         android:layout_marginTop="24dp"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edt_email" />
+        app:layout_constraintTop_toBottomOf="@id/edt_email_login" />
 
     <Button
         android:id="@+id/btn_login"
@@ -62,7 +62,7 @@
         android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_password" />
+        app:layout_constraintTop_toBottomOf="@+id/edt_password_login" />
 
     <ProgressBar
         android:id="@+id/progress_circular"
